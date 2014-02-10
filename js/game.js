@@ -16,17 +16,9 @@ YUI.add('flappybird-game', function (Y, NAME) {
         e.preventDefault();
         e.stopPropagation();
       }.bind(this));
-
-      this.canvas.on('touchend', function () {
-        this.bird.stopFlying();
-      }.bind(this));
       
       this.canvas.on('mousedown', function () {
         this.bird.startFlying();
-      }.bind(this));
-
-      this.canvas.on('mouseup', function () {
-        this.bird.stopFlying();
       }.bind(this));
 
       function getAtlas(atlasPath) {
@@ -109,7 +101,7 @@ YUI.add('flappybird-game', function (Y, NAME) {
         sprites['land'].setX(0);
       }
 
-      this.bird.draw(this.context);
+      this.bird.draw(this.context, timestamp);
 
       requestAnimationFrame(this.tick.bind(this));
     }

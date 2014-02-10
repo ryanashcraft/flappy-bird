@@ -18,15 +18,35 @@ YUI.add('flappybird-sprite', function (Y, NAME) {
 
   Sprite.prototype = {
     draw: function(context) {
-      context.drawImage(this.sourceImage,
-        this.atlasX,
-        this.atlasY,
-        this.width,
-        this.height,
-        this.x,
-        this.y,
-        this.width,
-        this.height);
+      context.save();
+      context.translate(this.x, this.y);
+      
+      if (this.rotation !== undefined) {
+        context.translate(this.width / 2, this.height / 2);
+        context.rotate(this.rotation);
+
+         context.drawImage(this.sourceImage,
+          this.atlasX,
+          this.atlasY,
+          this.width,
+          this.height,
+          -this.width / 2,
+          -this.height / 2,
+          this.width,
+          this.height);
+      } else {
+         context.drawImage(this.sourceImage,
+          this.atlasX,
+          this.atlasY,
+          this.width,
+          this.height,
+          0,
+          0,
+          this.width,
+          this.height);
+      }
+     
+      context.restore();
     },
 
     getX: function() {

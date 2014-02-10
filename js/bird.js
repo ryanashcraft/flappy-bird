@@ -5,6 +5,8 @@ YUI.add('flappybird-bird', function (Y, NAME) {
         this[prop] = sprite[prop];
       }
      }
+
+     this.flying = false;
   }
 
   Y.extend(Bird, Y.FlappyBird.Sprite);
@@ -12,8 +14,22 @@ YUI.add('flappybird-bird', function (Y, NAME) {
   Bird.NAME = "flappybirdsprite";
 
   Bird.prototype.draw = function (context) {
+    if (this.flying) {
+      this.y -= 1;
+    } else {
+      this.y += 1;
+    }
+
     Bird.superclass.draw.call(this, context);
-  }
+  };
+
+  Bird.prototype.startFlying = function () {
+    this.flying = true;
+  };
+
+  Bird.prototype.stopFlying = function () {
+    this.flying = false;
+  };
 
   Y.namespace('FlappyBird');
   Y.FlappyBird.Bird = Bird;

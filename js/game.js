@@ -11,9 +11,23 @@ YUI.add('flappybird-game', function (Y, NAME) {
   FlappyBirdGame.prototype = {
     init: function (callback) {
       this.canvas.on('touchstart', function (e) {
+        this.bird.startFlying();
+
         e.preventDefault();
         e.stopPropagation();
-      });
+      }.bind(this));
+
+      this.canvas.on('touchend', function () {
+        this.bird.stopFlying();
+      }.bind(this));
+      
+      this.canvas.on('mousedown', function () {
+        this.bird.startFlying();
+      }.bind(this));
+
+      this.canvas.on('mouseup', function () {
+        this.bird.stopFlying();
+      }.bind(this));
 
       function getAtlas(atlasPath) {
         return new Y.Promise(function (resolve, reject) {
@@ -61,9 +75,9 @@ YUI.add('flappybird-game', function (Y, NAME) {
           return previousValue;
         }, {});
 
-        bird = new Y.FlappyBird.Bird(sprites['bird0_0']);
-        bird.setCenterX(this.canvas.get('width') / 2);
-        bird.setCenterY(this.canvas.get('height') / 2);
+        this.bird = new Y.FlappyBird.Bird(sprites['bird0_0']);
+        this.bird.setCenterX(this.canvas.get('width') / 2);
+        this.bird.setCenterY(this.canvas.get('height') / 2);
 
         callback();
       }
@@ -95,7 +109,7 @@ YUI.add('flappybird-game', function (Y, NAME) {
         sprites['land'].setX(0);
       }
 
-      bird.draw(this.context);
+      this.bird.draw(this.context);
 
       requestAnimationFrame(this.tick.bind(this));
     }

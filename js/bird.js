@@ -6,21 +6,60 @@ YUI.add('flappybird-bird', function (Y, NAME) {
   var G_ACCELERATION = 0.05;
   var MULTIPLIER = 8;
 
-  function Bird(sprite) {
-     for (var prop in sprite) {
-      if (sprite.hasOwnProperty(prop) && typeof sprite[prop] !== 'function') {
-        this[prop] = sprite[prop];
-      }
-     }
+  function Bird(sprites) {
+    this.sprites = sprites;
 
-     this.dy = 0;
-     this.flying = false;
-     this.timeStartedFlying = null;
+    this.x = sprites[0].x;
+    this.y = sprites[0].y;
+
+    this.rotation = 0;
+
+    this.dy = 0;
+
+    this.width = sprites[0].width;
+    this.height = sprites[0].height;
+
+    this.flying = false;
+    this.timeStartedFlying = null;
+
+    this.spriteIndex = 0;
   }
 
-  Y.extend(Bird, Y.FlappyBird.Sprite);
+  Bird.NAME = "flappybirdbird";
 
-  Bird.NAME = "flappybirdsprite";
+  Bird.prototype = {
+    getX: function() {
+      return this.x;
+    },
+
+    setX: function(newValue) {
+      this.x = newValue;
+    },
+
+    setCenterX: function(newValue) {
+      this.x = newValue - this.width / 2;
+    },
+
+    getY: function() {
+      return this.y;
+    },
+
+    setY: function(newValue) {
+      this.y = newValue;
+    },
+
+    setCenterY: function(newValue) {
+      this.y = newValue - this.height / 2;
+    },
+
+    getWidth: function() {
+      return this.width;
+    },
+
+    getHeight: function() {
+      return this.height;
+    }
+  };
 
   Bird.prototype.draw = function (context, timestamp) {
     if (this.flying) {
@@ -34,14 +73,23 @@ YUI.add('flappybird-bird', function (Y, NAME) {
         this.timeStartedFlying = null;
       }
     } else {
-      this.dy += Math.min(G_ACCELERATION, MAX_DY);
+      this.dy = Math.min(this.dy + G_ACCELERATION, MAX_DY);
     }
 
     this.y += this.dy * MULTIPLIER;
 
     this.rotation = Math.max(Math.min(this.dy + MIN_ROTATION / MAX_DY, MAX_ROTATION), MIN_ROTATION);
     
-    Bird.superclass.draw.call(this, context);
+    this.spriteIndex = Math.floor(timestamp / 50) % this.sprites.length;
+    if (this.dy >= 0.5) {
+      this.spriteIndex = 0;
+    }
+
+    this.sprites[this.spriteIndex].x = this.x;
+    this.sprites[this.spriteIndex].y = this.y;
+    this.sprites[this.spriteIndex].rotation = this.rotation;
+
+    this.sprites[this.spriteIndex].draw.call(this.sprites[this.spriteIndex], context);
   };
 
   Bird.prototype.startFlying = function () {

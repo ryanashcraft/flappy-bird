@@ -67,7 +67,7 @@ YUI.add('flappybird-game', function (Y, NAME) {
           return previousValue;
         }, {});
 
-        this.bird = new Y.FlappyBird.Bird(sprites['bird0_0']);
+        this.bird = new Y.FlappyBird.Bird([sprites['bird0_0'], sprites['bird0_1'], sprites['bird0_2']]);
         this.bird.setCenterX(this.canvas.get('width') / 2);
         this.bird.setCenterY(this.canvas.get('height') / 2);
 

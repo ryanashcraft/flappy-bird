@@ -4,10 +4,6 @@ body {
   padding: 0;
 }
 
-#atlas {
-  display: none;
-}
-
 #game {
   float: left;
 }
